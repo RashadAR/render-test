@@ -1,20 +1,21 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 if (process.argv.length < 3) {
-    console.log('give password as argument');
-    process.exit(1);
+  console.log('give password as argument')
+  process.exit(1)
 }
 
 const password = process.argv[2]
 
 const url =
-    `mongodb+srv://Blaze:${password}@cluster0.zvtz7.mongodb.net/noteApp?retryWrites=true&w=majority`
+  `mongodb+srv://Blaze:${password}@cluster0.zvtz7.mongodb.net/noteApp?retryWrites=true&w=majority`
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
 const noteSchema = new mongoose.Schema({
-    content: String,
-    important: Boolean
+  content: String,
+  important: Boolean
 })
-const Note = mongoose.model('Note', noteSchema)
+
+module.exports = mongoose.model('Note', noteSchema)
 
 // const note = new Note({
 //     content: 'HTML is easy',

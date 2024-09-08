@@ -1,17 +1,16 @@
 const express = require('express')
-const app = express();
-const cors = require('cors');
+const app = express()
+const cors = require('cors')
 const Note = require('./models/note')
-
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
 const requestLogger = (req, res, next) => {
-    console.log('Method:', req.method);
-    console.log('Path:', req.path);
-    console.log('Body:', req.body);
-    console.log('---');
-    next();
+    console.log('Method:', req.method)
+    console.log('Path:', req.path)
+    console.log('Body:', req.body)
+    console.log('---')
+    next()
 }
 app.use(requestLogger)
 
@@ -26,10 +25,8 @@ app.get('/api/notes', (req, res) => {
 })
 
 app.post('/api/notes', (req, res, next) => {
-    const body = req.body;
-    if (!body.content === undefined) {
-        return res.status(400).json({ error: 'content missing' })
-    }
+    const body = req.body
+
     const note = new Note({
         content: body.content,
         important: Boolean(body.important) || false,
@@ -50,16 +47,16 @@ app.get('/api/notes/:id', (req, res, next) => {
         .catch(error => next(error))
 })
 
-app.delete('/api/notes/:id', (req, res) => {
+app.delete('/api/notes/:id', (req, res, next) => {
     Note.findByIdAndDelete(req.params.id)
-        .then(result => {
+        .then(() => {
             res.status(204).end()
         })
         .catch(error => next(error))
 })
 
 app.put('/api/notes/:id', (req, res, next) => {
-    const { content, important } = req.body;
+    const { content, important } = req.body
 
     Note.findByIdAndUpdate(req.params.id,
         { content, important },
